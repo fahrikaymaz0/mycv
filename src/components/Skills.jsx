@@ -1,7 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Database, Layout, Server, Cpu, Globe, Rocket } from 'lucide-react'
-import SkillGlobe from './SkillGlobe'
+import SkillGlobe from './SkillGlobe.jsx'
 
 const skillGroups = [
     {
