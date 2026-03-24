@@ -30,12 +30,12 @@ const Skills = () => {
 
     return (
         <section id="skills">
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '4rem', alignItems: 'center' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem', alignItems: 'center' }}>
                 <div>
-                    <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>Teknik <span className="premium-gradient-text">Yetenekler</span></h2>
-                    <p style={{ color: 'var(--text-secondary)', marginBottom: '3rem' }}>Fikirleri gerçeğe dönüştüren teknoloji yığınım.</p>
+                    <h2 style={{ fontSize: '2.2rem', marginBottom: '0.75rem' }}>Teknik <span className="premium-gradient-text">Yetenekler</span></h2>
+                    <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem', fontSize: '1rem' }}>Fikirleri gerçeğe dönüştüren teknoloji yığınım.</p>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '2rem' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
                         {skillGroups.map((group, idx) => (
                             <motion.div
                                 key={idx}
@@ -44,15 +44,15 @@ const Skills = () => {
                                 transition={{ delay: idx * 0.1 }}
                                 viewport={{ once: true }}
                                 className="glass-card"
-                                style={{ padding: '1.5rem' }}
+                                style={{ padding: '1rem' }}
                             >
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem', color: 'var(--accent-primary)' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.75rem', color: 'var(--accent-primary)' }}>
                                     {group.icon}
-                                    <h3 style={{ fontSize: '1.1rem', fontWeight: 700 }}>{group.category}</h3>
+                                    <h3 style={{ fontSize: '1rem', fontWeight: 700 }}>{group.category}</h3>
                                 </div>
-                                <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
                                     {group.skills.map(skill => (
-                                        <li key={skill} style={{ fontSize: '0.9rem', opacity: 0.8, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                        <li key={skill} style={{ fontSize: '0.8rem', opacity: 0.8, display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                                             <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: 'var(--accent-secondary)' }}></div>
                                             {skill}
                                         </li>

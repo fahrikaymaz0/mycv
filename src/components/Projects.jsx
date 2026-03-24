@@ -49,11 +49,12 @@ const ProjectCard = ({ project, idx }) => {
                         right: '0',
                         color: project.color || 'var(--accent-primary)',
                         background: `${project.color || '#3b82f6'}11`,
-                        padding: '0.3rem 0.6rem',
-                        borderRadius: '6px',
-                        fontSize: '0.7rem',
-                        fontWeight: 700,
-                        letterSpacing: '0.05em'
+                        padding: '0.2rem 0.5rem',
+                        borderRadius: '4px',
+                        fontSize: '0.65rem',
+                        fontWeight: 800,
+                        letterSpacing: '0.05em',
+                        zIndex: 10
                     }}>
                         {t('projects.live')}
                     </div>
@@ -64,20 +65,18 @@ const ProjectCard = ({ project, idx }) => {
                     color: project.color || '#3b82f6',
                     border: `1px solid ${(project.color || '#3b82f6')}33`
                 }}>
-                    {project.icon || <Github size={20} />}
+                    {project.icon || <Github size={18} />}
                 </div>
 
-                <h3 className="project-title">{projectTitle}</h3>
+                <h3 className="project-title" style={{ fontWeight: 800 }}>{projectTitle}</h3>
                 <p className="project-desc">{projectDesc || "No description provided."}</p>
 
                 <div className="project-tags">
                     {(project.tags || []).map(tag => (
                         <span key={tag} style={{ 
-                            fontSize: '0.75rem', 
-                            fontWeight: 600, 
+                            fontWeight: 700, 
                             color: project.color || '#3b82f6', 
                             background: `${project.color || '#3b82f6'}11`, 
-                            padding: '0.2rem 0.6rem', 
                             borderRadius: '4px', 
                             border: `1px solid ${(project.color || '#3b82f6')}22` 
                         }}>
@@ -91,17 +90,17 @@ const ProjectCard = ({ project, idx }) => {
                         color: project.color || '#3b82f6', 
                         display: 'flex', 
                         alignItems: 'center', 
-                        gap: '0.5rem', 
-                        fontWeight: 600, 
-                        fontSize: '0.9rem' 
+                        gap: '0.35rem', 
+                        fontWeight: 700, 
+                        fontSize: '0.85rem' 
                     }}>
                         {projectLink ? (
                             <>
-                                {t('projects.inspect')} <ExternalLink size={14} />
+                                {t('projects.inspect')} <ExternalLink size={12} />
                             </>
                         ) : (
                             <>
-                                {t('projects.details')} <ExternalLink size={14} />
+                                {t('projects.details')} <ExternalLink size={12} />
                             </>
                         )}
                     </div>
@@ -247,11 +246,11 @@ const Projects = () => {
 
     return (
         <section id="projects">
-            <div style={{ marginBottom: '3rem', textAlign: 'center' }}>
-                <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>
+            <div style={{ marginBottom: '2.5rem', textAlign: 'center' }}>
+                <h2 style={{ fontSize: '2.2rem', marginBottom: '0.75rem' }}>
                     {t('projects.title')} <span className="premium-gradient-text">{t('projects.titleSpan')}</span>
                 </h2>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '1rem' }}>{t('projects.subtitle')}</p>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>{t('projects.subtitle')}</p>
             </div>
 
             <motion.div 
@@ -276,34 +275,34 @@ const Projects = () => {
             </motion.div>
 
             {allProjects.length > 6 && (
-                <div style={{ marginTop: '3rem', display: 'flex', justifyContent: 'center' }}>
+                <div style={{ marginTop: '2.5rem', display: 'flex', justifyContent: 'center' }}>
                     <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={() => setShowAll(!showAll)}
                         className="glass-card premium-btn"
                         style={{
-                            padding: '1rem 2.5rem',
+                            padding: '0.8rem 2rem',
                             background: 'rgba(255, 255, 255, 0.05)',
                             border: '1px solid var(--glass-border)',
-                            borderRadius: '12px',
+                            borderRadius: '10px',
                             color: 'white',
                             cursor: 'pointer',
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '1rem',
-                            fontSize: '1rem',
-                            fontWeight: 600,
+                            gap: '0.75rem',
+                            fontSize: '0.9rem',
+                            fontWeight: 700,
                             transition: 'all 0.3s ease'
                         }}
                     >
                         {showAll ? (
                             <>
-                                {t('projects.showLess')} <ChevronUp size={20} />
+                                {t('projects.showLess')} <ChevronUp size={18} />
                             </>
                         ) : (
                             <>
-                                {t('projects.showMore')} <ChevronDown size={20} />
+                                {t('projects.showMore')} <ChevronDown size={18} />
                             </>
                         )}
                     </motion.button>
