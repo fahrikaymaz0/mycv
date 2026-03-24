@@ -131,25 +131,49 @@ section {
   flex-direction: column;
 }
 
-/* Mobile Responsiveness */
+.project-icon-box {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.project-title { font-size: 1.5rem; margin-bottom: 1rem; }
+.project-desc { color: var(--text-secondary); margin-bottom: 2rem; flex-grow: 1; font-size: 1rem; }
+.project-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; }
+
+/* Mobile Responsiveness - App-Like Optimization */
 @media (max-width: 768px) {
   section {
-    padding: 50px 15px;
+    padding: 40px 15px;
   }
 
-  h1 { font-size: 2.2rem !important; }
-  h2 { font-size: 1.8rem !important; }
-  h3 { font-size: 1.3rem !important; }
+  h1 { font-size: 2rem !important; }
+  h2 { font-size: 1.6rem !important; }
 
   .projects-grid {
     grid-template-columns: 1fr !important;
-    gap: 1.5rem !important;
+    gap: 1.2rem !important;
   }
 
   .project-card-inner {
     padding: 1.5rem !important;
   }
 
+  .project-icon-box {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+  }
+
+  .project-title { font-size: 1.2rem !important; margin-bottom: 0.6rem !important; }
+  .project-desc { font-size: 0.9rem !important; margin-bottom: 1.2rem !important; }
+  .project-tags { margin-bottom: 1rem !important; }
+  
   .glass-card {
     border-radius: 16px;
   }
@@ -161,13 +185,31 @@ section {
 }
 
 @media (max-width: 480px) {
-  .project-card-inner {
-    padding: 1.2rem !important;
+  section {
+    padding: 30px 12px;
   }
-  
+
   .projects-grid {
-    gap: 1rem !important;
+    gap: 0.8rem !important;
   }
+
+  .project-card-inner {
+    padding: 1.25rem !important;
+  }
+
+  .project-icon-box {
+    width: 36px;
+    height: 36px;
+    margin-bottom: 0.8rem;
+  }
+
+  .project-title { font-size: 1.1rem !important; margin-bottom: 0.5rem !important; }
+  .project-desc { font-size: 0.85rem !important; margin-bottom: 1rem !important; line-height: 1.4 !important; }
   
-  h2 { font-size: 1.6rem !important; }
+  h2 { font-size: 1.4rem !important; }
+  
+  .project-tags span {
+    font-size: 0.7rem !important;
+    padding: 0.15rem 0.5rem !important;
+  }
 }

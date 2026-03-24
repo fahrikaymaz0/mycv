@@ -41,7 +41,7 @@ const ProjectCard = ({ project, idx }) => {
 
     const CardContent = (
         <>
-            <div style={{ transform: "translateZ(50px)" }}>
+            <div style={{ transform: "translateZ(50px)", height: '100%', display: 'flex', flexDirection: 'column' }}>
                 {isLive && (
                     <div style={{
                         position: 'absolute',
@@ -59,34 +59,42 @@ const ProjectCard = ({ project, idx }) => {
                     </div>
                 )}
 
-                <div style={{
-                    width: '50px',
-                    height: '50px',
-                    borderRadius: '12px',
+                <div className="project-icon-box" style={{
                     background: `linear-gradient(135deg, ${(project.color || '#3b82f6')}22, ${(project.color || '#3b82f6')}44)`,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
                     color: project.color || '#3b82f6',
-                    marginBottom: '1.5rem',
                     border: `1px solid ${(project.color || '#3b82f6')}33`
                 }}>
-                    {project.icon || <Github size={24} />}
+                    {project.icon || <Github size={20} />}
                 </div>
 
-                <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>{projectTitle}</h3>
-                <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem', flexGrow: 1 }}>{projectDesc || "No description provided."}</p>
+                <h3 className="project-title">{projectTitle}</h3>
+                <p className="project-desc">{projectDesc || "No description provided."}</p>
 
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.5rem' }}>
+                <div className="project-tags">
                     {(project.tags || []).map(tag => (
-                        <span key={tag} style={{ fontSize: '0.75rem', fontWeight: 600, color: project.color || '#3b82f6', background: `${project.color || '#3b82f6'}11`, padding: '0.2rem 0.6rem', borderRadius: '4px', border: `1px solid ${(project.color || '#3b82f6')}22` }}>
+                        <span key={tag} style={{ 
+                            fontSize: '0.75rem', 
+                            fontWeight: 600, 
+                            color: project.color || '#3b82f6', 
+                            background: `${project.color || '#3b82f6'}11`, 
+                            padding: '0.2rem 0.6rem', 
+                            borderRadius: '4px', 
+                            border: `1px solid ${(project.color || '#3b82f6')}22` 
+                        }}>
                             {tag}
                         </span>
                     ))}
                 </div>
 
-                <div style={{ display: 'flex', gap: '1rem' }}>
-                    <div style={{ color: project.color || '#3b82f6', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600, fontSize: '0.9rem' }}>
+                <div style={{ display: 'flex', gap: '1rem', marginTop: 'auto' }}>
+                    <div style={{ 
+                        color: project.color || '#3b82f6', 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        gap: '0.5rem', 
+                        fontWeight: 600, 
+                        fontSize: '0.9rem' 
+                    }}>
                         {projectLink ? (
                             <>
                                 {t('projects.inspect')} <ExternalLink size={14} />
@@ -109,7 +117,7 @@ const ProjectCard = ({ project, idx }) => {
                     href={projectLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
+                    style={{ textDecoration: 'none', color: 'inherit', display: 'block', height: '100%' }}
                 >
                     {children}
                 </a>
@@ -131,6 +139,7 @@ const ProjectCard = ({ project, idx }) => {
                     transformStyle: "preserve-3d",
                     position: 'relative',
                     overflow: 'hidden',
+                    height: '100%',
                     border: idx === 0 ? `1px solid ${(project.color || '#3b82f6')}44` : '1px solid var(--glass-border)',
                     cursor: projectLink ? 'pointer' : 'default'
                 }}
@@ -238,8 +247,8 @@ const Projects = () => {
 
     return (
         <section id="projects">
-            <div style={{ marginBottom: '4rem', textAlign: 'center' }}>
-                <h2 className="responsive-title" style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>
+            <div style={{ marginBottom: '3rem', textAlign: 'center' }}>
+                <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>
                     {t('projects.title')} <span className="premium-gradient-text">{t('projects.titleSpan')}</span>
                 </h2>
                 <p style={{ color: 'var(--text-secondary)', fontSize: '1rem' }}>{t('projects.subtitle')}</p>
@@ -258,6 +267,7 @@ const Projects = () => {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9 }}
                             transition={{ duration: 0.4, delay: idx * 0.05 }}
+                            style={{ height: '100%' }}
                         >
                             <ProjectCard project={project} idx={idx} />
                         </motion.div>
@@ -266,7 +276,7 @@ const Projects = () => {
             </motion.div>
 
             {allProjects.length > 6 && (
-                <div style={{ marginTop: '4rem', display: 'flex', justifyContent: 'center' }}>
+                <div style={{ marginTop: '3rem', display: 'flex', justifyContent: 'center' }}>
                     <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
