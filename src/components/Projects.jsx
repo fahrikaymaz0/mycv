@@ -1,7 +1,10 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion'
-import { ExternalLink, Layers, MessageSquare, Zap, FormInput, Cpu, Rocket, Sword, ChevronDown, ChevronUp } from 'lucide-react'
+import { ExternalLink, Layers, MessageSquare, Zap, FormInput, Cpu, Rocket, Sword, ChevronDown, ChevronUp, Github } from 'lucide-react'
 import { useLanguage } from '../context/LanguageContext'
+import { Octokit } from '@octokit/rest'
+
+const octokit = new Octokit();
 
 const ProjectCard = ({ project, idx }) => {
     const { t } = useLanguage();
@@ -31,16 +34,21 @@ const ProjectCard = ({ project, idx }) => {
         y.set(0);
     };
 
+    const isLive = project.link || project.homepage;
+    const projectTitle = project.isFromGithub ? project.name : t(`projects.list.${project.id}.title`);
+    const projectDesc = project.isFromGithub ? project.description : t(`projects.list.${project.id}.desc`);
+    const projectLink = project.link || project.homepage;
+
     const CardContent = (
         <>
             <div style={{ transform: "translateZ(50px)" }}>
-                {project.link && (
+                {isLive && (
                     <div style={{
                         position: 'absolute',
                         top: '0',
                         right: '0',
-                        color: project.color,
-                        background: `${project.color}11`,
+                        color: project.color || 'var(--accent-primary)',
+                        background: `${project.color || '#3b82f6'}11`,
                         padding: '0.3rem 0.6rem',
                         borderRadius: '6px',
                         fontSize: '0.7rem',
@@ -55,31 +63,31 @@ const ProjectCard = ({ project, idx }) => {
                     width: '50px',
                     height: '50px',
                     borderRadius: '12px',
-                    background: `linear-gradient(135deg, ${project.color}22, ${project.color}44)`,
+                    background: `linear-gradient(135deg, ${(project.color || '#3b82f6')}22, ${(project.color || '#3b82f6')}44)`,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: project.color,
+                    color: project.color || '#3b82f6',
                     marginBottom: '1.5rem',
-                    border: `1px solid ${project.color}33`
+                    border: `1px solid ${(project.color || '#3b82f6')}33`
                 }}>
-                    {project.icon}
+                    {project.icon || <Github size={24} />}
                 </div>
 
-                <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>{t(`projects.list.${project.id}.title`)}</h3>
-                <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem', flexGrow: 1 }}>{t(`projects.list.${project.id}.desc`)}</p>
+                <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>{projectTitle}</h3>
+                <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem', flexGrow: 1 }}>{projectDesc || "No description provided."}</p>
 
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.5rem' }}>
-                    {project.tags.map(tag => (
-                        <span key={tag} style={{ fontSize: '0.75rem', fontWeight: 600, color: project.color, background: `${project.color}11`, padding: '0.2rem 0.6rem', borderRadius: '4px', border: `1px solid ${project.color}22` }}>
+                    {(project.tags || []).map(tag => (
+                        <span key={tag} style={{ fontSize: '0.75rem', fontWeight: 600, color: project.color || '#3b82f6', background: `${project.color || '#3b82f6'}11`, padding: '0.2rem 0.6rem', borderRadius: '4px', border: `1px solid ${(project.color || '#3b82f6')}22` }}>
                             {tag}
                         </span>
                     ))}
                 </div>
 
                 <div style={{ display: 'flex', gap: '1rem' }}>
-                    <div style={{ color: project.color, display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600, fontSize: '0.9rem' }}>
-                        {project.link ? (
+                    <div style={{ color: project.color || '#3b82f6', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600, fontSize: '0.9rem' }}>
+                        {projectLink ? (
                             <>
                                 {t('projects.inspect')} <ExternalLink size={14} />
                             </>
@@ -95,10 +103,10 @@ const ProjectCard = ({ project, idx }) => {
     );
 
     const CardWrapper = ({ children }) => {
-        if (project.link) {
+        if (projectLink) {
             return (
                 <a
-                    href={project.link}
+                    href={projectLink}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
@@ -127,8 +135,8 @@ const ProjectCard = ({ project, idx }) => {
                     display: 'flex',
                     flexDirection: 'column',
                     height: '100%',
-                    border: idx === 0 ? `1px solid ${project.color}44` : '1px solid var(--glass-border)',
-                    cursor: project.link ? 'pointer' : 'default'
+                    border: idx === 0 ? `1px solid ${(project.color || '#3b82f6')}44` : '1px solid var(--glass-border)',
+                    cursor: projectLink ? 'pointer' : 'default'
                 }}
             >
                 {CardContent}
@@ -137,7 +145,7 @@ const ProjectCard = ({ project, idx }) => {
     );
 };
 
-const projects = [
+const staticProjects = [
     {
         id: "tamahagane",
         icon: <Sword size={24} />,
@@ -195,8 +203,40 @@ const projects = [
 const Projects = () => {
     const { t } = useLanguage();
     const [showAll, setShowAll] = useState(false);
+    const [allProjects, setAllProjects] = useState(staticProjects);
 
-    const visibleProjects = showAll ? projects : projects.slice(0, 6);
+    useEffect(() => {
+        const fetchProjects = async () => {
+            try {
+                const { data } = await octokit.repos.listForUser({
+                    username: 'fahrikaymaz0',
+                    sort: 'updated',
+                    per_page: 20
+                });
+
+                // Filter for repos with a homepage URL that are not already in staticProjects
+                const dynamicProjects = data
+                    .filter(repo => repo.homepage && !staticProjects.some(sp => sp.link === repo.homepage || repo.name.toLowerCase().includes(sp.id)))
+                    .map(repo => ({
+                        id: repo.id,
+                        name: repo.name,
+                        description: repo.description,
+                        tags: repo.topics && repo.topics.length > 0 ? repo.topics.slice(0, 3) : [repo.language || "N/A"],
+                        color: "#3b82f6", // Default color for dynamic projects
+                        homepage: repo.homepage,
+                        isFromGithub: true
+                    }));
+
+                setAllProjects([...staticProjects, ...dynamicProjects]);
+            } catch (err) {
+                console.error("Error fetching dynamic projects:", err);
+            }
+        };
+
+        fetchProjects();
+    }, []);
+
+    const visibleProjects = showAll ? allProjects : allProjects.slice(0, 6);
 
     return (
         <section id="projects">
@@ -209,15 +249,15 @@ const Projects = () => {
                 layout
                 style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2.5rem', perspective: "1000px" }}
             >
-                <AnimatePresence>
+                <AnimatePresence mode="popLayout">
                     {visibleProjects.map((project, idx) => (
                         <motion.div
-                            key={project.id}
+                            key={project.id || project.name}
                             layout
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.95 }}
-                            transition={{ duration: 0.4, delay: idx * 0.1 }}
+                            exit={{ opacity: 0, scale: 0.9 }}
+                            transition={{ duration: 0.4, delay: idx * 0.05 }}
                         >
                             <ProjectCard project={project} idx={idx} />
                         </motion.div>
@@ -225,7 +265,7 @@ const Projects = () => {
                 </AnimatePresence>
             </motion.div>
 
-            {projects.length > 6 && (
+            {allProjects.length > 6 && (
                 <div style={{ marginTop: '4rem', display: 'flex', justifyContent: 'center' }}>
                     <motion.button
                         whileHover={{ scale: 1.05 }}
