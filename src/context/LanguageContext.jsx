@@ -53,8 +53,14 @@ const translations = {
                 wizard: {
                     title: "Wizard UI Başvuru Formu",
                     desc: "Modern ve kullanıcı dostu, 10+ adımlı profesyonel wizard form tasarımı."
+                },
+                tamahagane: {
+                    title: "Tamahagane Forge",
+                    desc: "Samuray estetiğiyle tasarlanmış, yüksek performanslı ve görsel odaklı modern web deneyimi."
                 }
-            }
+            },
+            showMore: "Daha Fazla Göster",
+            showLess: "Daha Az Göster"
         },
         contact: {
             title: "Hadi",
@@ -132,8 +138,14 @@ const translations = {
                 wizard: {
                     title: "Wizard UI Application Form",
                     desc: "Modern and user-friendly, 10+ step professional wizard form design."
+                },
+                tamahagane: {
+                    title: "Tamahagane Forge",
+                    desc: "High-performance and visually-oriented modern web experience designed with samurai aesthetics."
                 }
-            }
+            },
+            showMore: "Show More",
+            showLess: "Show Less"
         },
         contact: {
             title: "Let's",

@@ -1,6 +1,6 @@
-import React, { useRef } from 'react'
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
-import { ExternalLink, Layers, MessageSquare, Zap, FormInput, Cpu, Rocket } from 'lucide-react'
+import React, { useRef, useState } from 'react'
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion'
+import { ExternalLink, Layers, MessageSquare, Zap, FormInput, Cpu, Rocket, Sword, ChevronDown, ChevronUp } from 'lucide-react'
 import { useLanguage } from '../context/LanguageContext'
 
 const ProjectCard = ({ project, idx }) => {
@@ -139,6 +139,13 @@ const ProjectCard = ({ project, idx }) => {
 
 const projects = [
     {
+        id: "tamahagane",
+        icon: <Sword size={24} />,
+        tags: ["Samurai Aesthetic", "Framer Motion", "High Fidelity"],
+        color: "#ff4d4d",
+        link: "https://fahrikaymaz0.github.io/tamahagane-forge/"
+    },
+    {
         id: "navora",
         icon: <Rocket size={24} />,
         tags: ["PWA", "AI Entegrasyonu", "Health-Tech"],
@@ -187,6 +194,9 @@ const projects = [
 
 const Projects = () => {
     const { t } = useLanguage();
+    const [showAll, setShowAll] = useState(false);
+
+    const visibleProjects = showAll ? projects : projects.slice(0, 6);
 
     return (
         <section id="projects">
@@ -195,11 +205,60 @@ const Projects = () => {
                 <p style={{ color: 'var(--text-secondary)' }}>{t('projects.subtitle')}</p>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2.5rem', perspective: "1000px" }}>
-                {projects.map((project, idx) => (
-                    <ProjectCard key={project.id} project={project} idx={idx} />
-                ))}
-            </div>
+            <motion.div 
+                layout
+                style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2.5rem', perspective: "1000px" }}
+            >
+                <AnimatePresence>
+                    {visibleProjects.map((project, idx) => (
+                        <motion.div
+                            key={project.id}
+                            layout
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            transition={{ duration: 0.4, delay: idx * 0.1 }}
+                        >
+                            <ProjectCard project={project} idx={idx} />
+                        </motion.div>
+                    ))}
+                </AnimatePresence>
+            </motion.div>
+
+            {projects.length > 6 && (
+                <div style={{ marginTop: '4rem', display: 'flex', justifyContent: 'center' }}>
+                    <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => setShowAll(!showAll)}
+                        className="glass-card"
+                        style={{
+                            padding: '1rem 2.5rem',
+                            background: 'rgba(255, 255, 255, 0.05)',
+                            border: '1px solid var(--glass-border)',
+                            borderRadius: '12px',
+                            color: 'white',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '1rem',
+                            fontSize: '1rem',
+                            fontWeight: 600,
+                            transition: 'all 0.3s ease'
+                        }}
+                    >
+                        {showAll ? (
+                            <>
+                                {t('projects.showLess')} <ChevronUp size={20} />
+                            </>
+                        ) : (
+                            <>
+                                {t('projects.showMore')} <ChevronDown size={20} />
+                            </>
+                        )}
+                    </motion.button>
+                </div>
+            )}
         </section>
     )
 }
