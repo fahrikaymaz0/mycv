@@ -129,17 +129,15 @@ const ProjectCard = ({ project, idx }) => {
                     rotateX,
                     rotateY,
                     transformStyle: "preserve-3d",
-                    padding: '2.5rem',
                     position: 'relative',
                     overflow: 'hidden',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: '100%',
                     border: idx === 0 ? `1px solid ${(project.color || '#3b82f6')}44` : '1px solid var(--glass-border)',
                     cursor: projectLink ? 'pointer' : 'default'
                 }}
             >
-                {CardContent}
+                <div className="project-card-inner">
+                    {CardContent}
+                </div>
             </motion.div>
         </CardWrapper>
     );
@@ -241,13 +239,15 @@ const Projects = () => {
     return (
         <section id="projects">
             <div style={{ marginBottom: '4rem', textAlign: 'center' }}>
-                <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>{t('projects.title')} <span className="premium-gradient-text">{t('projects.titleSpan')}</span></h2>
-                <p style={{ color: 'var(--text-secondary)' }}>{t('projects.subtitle')}</p>
+                <h2 className="responsive-title" style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>
+                    {t('projects.title')} <span className="premium-gradient-text">{t('projects.titleSpan')}</span>
+                </h2>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '1rem' }}>{t('projects.subtitle')}</p>
             </div>
 
             <motion.div 
                 layout
-                style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2.5rem', perspective: "1000px" }}
+                className="projects-grid"
             >
                 <AnimatePresence mode="popLayout">
                     {visibleProjects.map((project, idx) => (
@@ -271,7 +271,7 @@ const Projects = () => {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={() => setShowAll(!showAll)}
-                        className="glass-card"
+                        className="glass-card premium-btn"
                         style={{
                             padding: '1rem 2.5rem',
                             background: 'rgba(255, 255, 255, 0.05)',
