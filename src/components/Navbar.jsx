@@ -27,13 +27,13 @@ const Navbar = () => {
             className={`glass-card ${scrolled ? 'nav-scrolled' : ''}`}
             style={{
                 position: 'fixed',
-                top: '1.5rem',
+                top: '1rem',
                 left: '50%',
                 transform: 'translateX(-50%)',
-                width: '90%',
+                width: '94%',
                 maxWidth: '1200px',
                 zIndex: 1000,
-                padding: '0.75rem 2rem',
+                padding: '0.6rem 1.25rem',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
@@ -47,13 +47,13 @@ const Navbar = () => {
             <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                style={{ fontSize: '1.25rem', fontWeight: 800, letterSpacing: '0.1em' }}
+                style={{ fontSize: '1.1rem', fontWeight: 800, letterSpacing: '0.05em' }}
             >
                 FAHRİ <span style={{ color: 'var(--accent-primary)' }}>K.</span>
             </motion.div>
 
             {/* Desktop Menu */}
-            <div style={{ display: 'none', gap: '2rem', alignItems: 'center' }} className="desktop-menu">
+            <div style={{ display: 'none', gap: '1.5rem', alignItems: 'center' }} className="desktop-menu">
                 {navLinks.map((link) => (
                     <motion.a
                         key={link.name}
@@ -62,7 +62,7 @@ const Navbar = () => {
                         style={{
                             textDecoration: 'none',
                             color: 'var(--text-primary)',
-                            fontSize: '0.9rem',
+                            fontSize: '0.85rem',
                             fontWeight: 500,
                             opacity: 0.7,
                             transition: 'opacity 0.2s'
@@ -73,17 +73,16 @@ const Navbar = () => {
                     </motion.a>
                 ))}
 
-                <div style={{ width: '1px', height: '20px', backgroundColor: 'var(--glass-border)' }}></div>
+                <div style={{ width: '1px', height: '16px', backgroundColor: 'var(--glass-border)' }}></div>
 
                 <div style={{ display: 'flex', gap: '1rem' }}>
                     <motion.button
                         whileTap={{ scale: 0.9 }}
                         onClick={() => { toggleLanguage(); }}
-                        style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+                        style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.4rem' }}
                     >
-                        <Globe size={18} /> <span style={{ fontSize: '0.8rem', fontWeight: 700 }}>{lang.toUpperCase()}</span>
+                        <Globe size={16} /> <span style={{ fontSize: '0.75rem', fontWeight: 700 }}>{lang.toUpperCase()}</span>
                     </motion.button>
-
                 </div>
             </div>
 
@@ -91,32 +90,32 @@ const Navbar = () => {
             <button
                 className="mobile-toggle"
                 onClick={() => { setIsOpen(!isOpen); }}
-                style={{ display: 'none', background: 'none', border: 'none', color: 'white', cursor: 'pointer' }}
+                style={{ display: 'none', background: 'none', border: 'none', color: 'white', cursor: 'pointer', padding: '0.5rem' }}
             >
-                {isOpen ? <X size={24} /> : <Menu size={24} />}
+                {isOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
 
             {/* Mobile Drawer */}
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
-                        initial={{ opacity: 0, y: -20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
+                        initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95, y: -10 }}
                         style={{
                             position: 'absolute',
-                            top: '100%',
+                            top: '110%',
                             left: 0,
                             right: 0,
-                            marginTop: '1rem',
-                            padding: '2rem',
-                            background: 'rgba(10, 10, 15, 0.95)',
-                            borderRadius: '24px',
+                            padding: '1.5rem',
+                            background: 'rgba(10, 10, 15, 0.98)',
+                            borderRadius: '20px',
                             border: '1px solid var(--glass-border)',
                             display: 'flex',
                             flexDirection: 'column',
-                            gap: '1.5rem',
-                            alignItems: 'center'
+                            gap: '1.25rem',
+                            alignItems: 'center',
+                            boxShadow: '0 20px 40px rgba(0,0,0,0.5)'
                         }}
                     >
                         {navLinks.map((link) => (
@@ -124,26 +123,34 @@ const Navbar = () => {
                                 key={link.name}
                                 href={link.href}
                                 onClick={() => { setIsOpen(false); }}
-                                style={{ textDecoration: 'none', color: 'white', fontSize: '1.1rem' }}
+                                style={{ textDecoration: 'none', color: 'white', fontSize: '1rem', fontWeight: 600 }}
                             >
                                 {link.name}
                             </a>
                         ))}
-                        <div style={{ display: 'flex', gap: '2rem', marginTop: '1rem' }}>
-                            <button onClick={() => { toggleLanguage(); }} style={{ background: 'none', border: 'none', color: 'white' }}><Globe /></button>
-                        </div>
+                        <div style={{ width: '100%', height: '1px', background: 'var(--glass-border)' }}></div>
+                        <button 
+                            onClick={() => { toggleLanguage(); setIsOpen(false); }} 
+                            style={{ background: 'none', border: 'none', color: 'white', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', fontWeight: 700 }}
+                        >
+                            <Globe size={18} /> {lang === 'tr' ? 'ENGLISH' : 'TÜRKÇE'}
+                        </button>
                     </motion.div>
                 )}
             </AnimatePresence>
 
             <style>{`
-        @media (min-width: 769px) {
-          .desktop-menu { display: flex !important; }
-        }
-        @media (max-width: 768px) {
-          .mobile-toggle { display: block !important; }
-        }
-      `}</style>
+                @media (min-width: 901px) {
+                    .desktop-menu { display: flex !important; }
+                }
+                @media (max-width: 900px) {
+                    .mobile-toggle { display: block !important; }
+                }
+                .nav-scrolled {
+                    top: 0.75rem !important;
+                    width: 96% !important;
+                }
+            `}</style>
         </nav>
     )
 }
