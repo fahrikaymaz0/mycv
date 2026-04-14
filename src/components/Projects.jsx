@@ -34,10 +34,10 @@ const ProjectCard = ({ project, idx }) => {
         y.set(0);
     };
 
-    const isLive = project.link || project.homepage;
+    const isLive = !!(project.link || project.homepage);
     const projectTitle = project.isFromGithub ? project.name : t(`projects.list.${project.id}.title`);
     const projectDesc = project.isFromGithub ? project.description : t(`projects.list.${project.id}.desc`);
-    const projectLink = project.link || project.homepage;
+    const projectLink = project.link || project.homepage || project.githubUrl;
 
     const CardContent = (
         <>
@@ -217,12 +217,15 @@ const Projects = () => {
                 const { data } = await octokit.repos.listForUser({
                     username: 'fahrikaymaz0',
                     sort: 'updated',
-                    per_page: 20
+                    per_page: 100
                 });
 
-                // Filter for repos with a homepage URL that are not already in staticProjects
+                // Filter out projects that are already in staticProjects
                 const dynamicProjects = data
-                    .filter(repo => repo.homepage && !staticProjects.some(sp => sp.link === repo.homepage || repo.name.toLowerCase().includes(sp.id)))
+                    .filter(repo => !staticProjects.some(sp => 
+                        (sp.link && (sp.link === repo.homepage || sp.link === repo.html_url)) || 
+                        repo.name.toLowerCase().includes(sp.id)
+                    ))
                     .map(repo => ({
                         id: repo.id,
                         name: repo.name,
@@ -230,10 +233,27 @@ const Projects = () => {
                         tags: repo.topics && repo.topics.length > 0 ? repo.topics.slice(0, 3) : [repo.language || "N/A"],
                         color: "#3b82f6", // Default color for dynamic projects
                         homepage: repo.homepage,
+                        githubUrl: repo.html_url,
                         isFromGithub: true
                     }));
 
-                setAllProjects([...staticProjects, ...dynamicProjects]);
+                const combined = [...staticProjects, ...dynamicProjects];
+                const sorted = combined.sort((a, b) => {
+                    const aHasLink = !!(a.link || a.homepage);
+                    const bHasLink = !!(b.link || b.homepage);
+                    
+                    if (aHasLink && !bHasLink) return -1;
+                    if (!aHasLink && bHasLink) return 1;
+                    
+                    // If both have links or both don't, prioritize dynamic (GitHub) projects
+                    // as they represent the most recent activity
+                    if (a.isFromGithub && !b.isFromGithub) return -1;
+                    if (!a.isFromGithub && b.isFromGithub) return 1;
+                    
+                    return 0;
+                });
+
+                setAllProjects(sorted);
             } catch (err) {
                 console.error("Error fetching dynamic projects:", err);
             }
