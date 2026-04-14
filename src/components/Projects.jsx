@@ -232,7 +232,7 @@ const Projects = () => {
                         description: repo.description,
                         tags: repo.topics && repo.topics.length > 0 ? repo.topics.slice(0, 3) : [repo.language || "N/A"],
                         color: "#3b82f6", // Default color for dynamic projects
-                        homepage: repo.homepage,
+                        homepage: repo.homepage || (repo.has_pages ? `https://${repo.owner.login.toLowerCase()}.github.io/${repo.name}/` : null),
                         githubUrl: repo.html_url,
                         isFromGithub: true
                     }));
